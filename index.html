@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8">
+		<title>Тестовое задание веб-разработчика</title>
+
+		<style>
+			body {
+				background: #202225;
+				overflow: hidden;
+				height: 100vh;
+				width: 100vw;
+				margin: 0;
+			}
+
+			#container {
+				justify-content: center;
+				align-items: center;
+				display: flex;
+				height: 100%;
+				width: 100%;
+			}
+
+			#block {
+				user-select: none;
+				max-width: 400px;
+				padding: 10px;
+				width: 100%;
+			}
+
+			#block > form {
+				box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+				width: -webkit-fill-available;
+				border: 1px solid #0009;
+				border-radius: 10px;
+				background: #36393f;
+				padding: 10px;
+			}
+
+			#block > form input {
+				width: -webkit-fill-available;
+				border: 1px solid #0009;
+				background: #202225;
+				margin-bottom: 10px;
+				border-radius: 5px;
+				padding: 7px;
+				font-size: 20px;
+				display: block;
+				outline: none;
+				color: #fff;
+			}
+
+			#block > form button {
+				width: -webkit-fill-available;
+				border: 1px solid #0009;
+				background: #202225;
+				position: relative;
+				border-radius: 5px;
+				cursor: pointer;
+				font-size: 20px;
+				display: block;
+				outline: none;
+				padding: 7px;
+				color: #fff;
+				top: 0px;
+			}
+
+			#block > form button:hover {
+				background: #1b1c1e;
+			}
+
+			#block > form button:active {
+				background: #101112;
+			}
+
+			#block > form input::-webkit-outer-spin-button,
+			#block > form input::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+			}
+
+			#result {
+				font-family: monospace;
+				border: 1px solid #0003;
+				border-radius: 4px;
+				text-align: center;
+				margin-top: 10px;
+				padding: 3px;
+			}
+			#result.success {
+				border: 1px solid #013803;
+				background: #64b767;
+				color: #013803;
+			}
+			#result.error {
+				border: 1px solid #3a0d0a;
+				background: #f44336;
+				color: #3a0d0a;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container">
+
+			<div id="block">
+				<form method="get" action="/action">
+					<input type="text" placeholder="ФИО клиента" name="name" />
+					<input type="email" placeholder="Email почта" name="email" />
+					<input type="number" placeholder="Номер телефона" name="phone" />
+					<button type="submit" name="send">Отправить</button>
+				</form>
+			</div>
+
+		</div>
+
+		<script>
+			(function(){
+				const url = new URL(document.location);
+				const params = url.searchParams;
+
+				if(!params.has('error')) return;
+
+				let result = document.createElement('div');
+				result.id = 'result';
+				const error = params.get('error');
+
+				if(error == ''){
+					result.textContent = 'Данные успешно обработаны!';
+					result.classList.add('success');
+				}else{
+					result.textContent = error;
+					result.classList.add('error');
+				}
+
+				document.querySelector('#block > form').appendChild(result);
+				history.pushState(null, null, window.location.href.replace(window.location.search, ''));
+
+				if(error == '') return;
+
+				if(params.has('name')) document.getElementsByName('name')[0].value = params.get('name');
+				if(params.has('email')) document.getElementsByName('email')[0].value = params.get('email');
+				if(params.has('phone')) document.getElementsByName('phone')[0].value = params.get('phone');
+			}());
+		</script>
+
+	</body>
+</html>
